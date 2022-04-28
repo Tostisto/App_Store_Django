@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from AppStore.forms import LoginForm
 from django.template import loader
 from django.shortcuts import redirect, render
-from .forms import AppReviewForm, DevRegisterForm, LoginForm, NewAppForm, RegisterForm, NewCategoryForm
+from .forms import AppReviewForm, DevRegisterForm, LoginForm, NewAppForm, RegisterForm, NewCategoryForm, UpdateAppForm
 from .models import User, App, AppCategory, App_review, Developer, Download
 
 def index(request):
@@ -190,6 +190,7 @@ def installApp(request, app_id, user_id):
     return redirect('/userPage/' + str(user_id))
 
 
+
 def newCategory(request, user_id):
     if request.method == 'POST':
         form = NewCategoryForm(request.POST)
@@ -207,3 +208,26 @@ def newCategory(request, user_id):
         form = NewCategoryForm()
         return render(request, 'newCategory.html', {'form': form})
 
+
+
+def updateApp(request, app_id, user_id):
+    app = App.objects.get(id=app_id)
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        form = UpdateAppForm(request.POST)
+        if form.is_valid():
+            app.name = form.cleaned_data['name']
+            app.version = form.cleaned_data['version']
+            app.description = form.cleaned_data['description']
+            app.app_category = form.cleaned_data['app_category']
+
+            app.save()
+
+            return redirect('/devPage/' + str(user_id))
+        else:
+            return render(request, 'updateApp.html', {'form': form, 'app': app, 'user': user})
+
+    else:
+        form = UpdateAppForm()
+        return render(request, 'updateApp.html', {'form': form, 'app': app, 'user': user})
