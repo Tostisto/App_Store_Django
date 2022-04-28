@@ -26,3 +26,12 @@ class NewAppForm(forms.Form):
     version = forms.CharField(label='Version', max_length=20)
     description = forms.CharField(label='Description', widget=forms.Textarea)
     app_category = forms.ModelChoiceField(queryset=AppCategory.objects.all())
+
+
+class NewCategoryForm(forms.Form):
+    name = forms.CharField(label='Name', max_length=20)
+
+
+class AppReviewForm(forms.Form):
+    stars = forms.IntegerField(label='Stars', min_value=1, max_value=5)
+    text_review = forms.CharField(label='Review', widget=forms.Textarea)

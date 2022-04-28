@@ -15,15 +15,22 @@
 </head>
 
 <body>
-    <h2>Register</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
 
-    <br>
-    <p>You can register as <a href="/devRegister">Developer</a></p>
+    <div class="d-flex justify-content-md-center">
+        <div class="card">
+            <h5 class="card-header">Register</h5>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Register</button>
+                    <br>
+                    <br>    
+                    <p>You can register as <a href="/devRegister">Developer</a></p>
+                </form>
+            </div>
+          </div>
+    </div>
 </body>
 
 </html>

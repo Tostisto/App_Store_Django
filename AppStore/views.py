@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from AppStore.forms import LoginForm
 from django.template import loader
 from django.shortcuts import redirect, render
-from .forms import DevRegisterForm, LoginForm, NewAppForm, RegisterForm
+from .forms import AppReviewForm, DevRegisterForm, LoginForm, NewAppForm, RegisterForm, NewCategoryForm
 from .models import User, App, AppCategory, App_review, Developer, Download
 
 def index(request):
@@ -137,16 +137,26 @@ def newApp(request, user_id):
 
 
 def appDetail(request, app_id, user_id):
-    # return render(request, 'appDetail.html')
-    app = App.objects.filter(id=app_id)[0]
+    app = App.objects.get(id=app_id)
     user = User.objects.get(id=user_id)
+    reviews = App_review.objects.all().filter(app=app)
 
-    template = loader.get_template('appDetail.html')
-    context = {
-        'app': app,
-        'user': user
-    }
-    return HttpResponse(template.render(context, request))
+    if request.method == 'POST':
+        form = AppReviewForm(request.POST)
+        if form.is_valid():
+            newReview = App_review(
+                app=app,
+                user=user,
+                text_review=form.cleaned_data['text_review'],
+                stars = form.cleaned_data['stars']
+            )
+            newReview.save()
+            return redirect('/appDetail/' + str(app_id) + '/' + str(user_id))
+        else:
+            return render(request, 'appDetail.html', {'form': form, 'app': app, 'user': user, 'reviews': reviews})
+    else:
+        form = AppReviewForm()
+        return render(request, 'appDetail.html', {'form': form, 'app': app, 'user': user, 'reviews': reviews})
 
 
 def removeApp(request, app_id):
@@ -154,10 +164,12 @@ def removeApp(request, app_id):
     app.delete()
     return redirect('/adminPage/' + str(request.user.id))
 
+
 def removeUser(request, user_id):
     user = User.objects.get(id=user_id)
     user.delete()
     return redirect('/adminPage/' + str(request.user.id))
+
 
 def removeDev(request, dev_id):
     dev = Developer.objects.get(id=dev_id)
@@ -176,3 +188,22 @@ def installApp(request, app_id, user_id):
     newDownload.save()
 
     return redirect('/userPage/' + str(user_id))
+
+
+def newCategory(request, user_id):
+    if request.method == 'POST':
+        form = NewCategoryForm(request.POST)
+        if form.is_valid():
+            newCat = AppCategory(
+                name=form.cleaned_data['name']
+            )
+            newCat.save()
+
+            return redirect('/adminPage/' + str(user_id))
+        else:
+            return render(request, 'newCategory.html', {'form': form})
+
+    else:
+        form = NewCategoryForm()
+        return render(request, 'newCategory.html', {'form': form})
+

@@ -25,7 +25,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Manage Store</a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Add New Category</a></li>
+                      <li><a class="dropdown-item" href="newCategory/">Add New Category</a></li>
                       <li><hr class="dropdown-divider"></li>
                       <li><a class="dropdown-item" href="/">Log out</a></li>
                     </ul>
@@ -50,7 +50,7 @@
                     <tr>
                         <td>{{ user.first_name }} {{ user.last_name }}</td>
                         <td>{{ user.email }}</td>
-                        <td><a type="button" class="btn btn-primary" href="/removeUser/{{user.id}}">Remove</a></td>
+                        <td><a type="button" class="btn btn-danger" href="/removeUser/{{user.id}}">Remove</a></td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -72,7 +72,7 @@
                     <tr>
                         <td>{{ dev.user.first_name }} {{ dev.user.last_name }}</td>
                         <td>{{ dev.user.email }}</td>
-                        <td><a type="button" class="btn btn-primary" href="/removeDev/{{dev.id}}">Remove</a></td>
+                        <td><a type="button" class="btn btn-danger" href="/removeDev/{{dev.id}}">Remove</a></td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -96,8 +96,8 @@
                         <td>{{app.name}}</td>
                         <td>{{app.developer.user.nickname}}</td>
                         <td>{{app.app_category.name}}</td>
-                        <td><a type="button" class="btn btn-primary" href="/appDetail/{{app.id}}">Detail</a></td>
-                        <th><a type="button" class="btn btn-primary" href="/removeApp/{{app.id}}">Remove App</a></th>
+                        <td><a type="button" class="btn btn-primary" href="/appDetail/{{ app.id }}/{{user.id}}">Detail</a></td>
+                        <th><a type="button" class="btn btn-danger" href="/removeApp/{{app.id}}">Remove App</a></th>
                     </tr>
                     {% endfor %}
                 </table>

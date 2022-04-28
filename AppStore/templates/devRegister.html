@@ -15,12 +15,20 @@
 </head>
 
 <body>
-    <h2>Register Page for Developers</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
+
+
+    <div class="d-flex justify-content-md-center">
+        <div class="card">
+            <h5 class="card-header">Register for Developer</h5>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+          </div>
+    </div>
 </body>
 
 </html>

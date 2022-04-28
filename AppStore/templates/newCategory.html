@@ -15,19 +15,14 @@
 </head>
 
 <body>
-    <div class="d-flex justify-content-md-center">
-        <div class="card">
-            <h5 class="card-header">Register</h5>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-                <br>
-                <p>You can register <a href="register">HERE</a></p>
-            </div>
-          </div>
+    <div class="container">
+        <h1>New App Category</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Add Category</button>
+        </form>
     </div>
 </body>
+
 </html>

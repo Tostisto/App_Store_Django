@@ -16,15 +16,12 @@
 </head>
 
 <body>
+
     <div class="container">
         <h1>Apps</h1>
 
-        {% if user %}
-            <h3>Hello {{ user.email }}</h3>
-        {% endif %}
-
         {% if appsList %}
-        <table class="table table-striped">
+        <!-- <table class="table table-striped">
             <tr>
                 <th>App Name</th>
                 <th>Category</th>
@@ -37,10 +34,35 @@
                 <td><a href="/appDetail/{{ app.id }}/{{user.id}}">Info</a></td>
             </tr>
             {% endfor %}
-        </table>
+        </table> -->
+
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for app in appsList %}
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">{{ app.name }}</h3>
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Dev: <b>{{ app.developer.user.nickname }}</b> </li>
+                  <li class="list-group-item">Category: <b>{{ app.app_category.name }}</b> </li>
+                </ul>
+                <div class="card-body">
+                  <a href="/appDetail/{{ app.id }}/{{user.id}}" class="card-link"><b>Detail</b></a>
+                  <a href="/appDetail/{{app.id}}/{{user.id}}/installApp" class="card-link">Install</a>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+        </div>  
+
+
         {% else %}
             <h1 class="h1">No apps found</h1>
         {% endif %}
+
+        <br>
 
         <button class="btn btn-primary" onclick="window.location.href='/'">Logout</button>
 
