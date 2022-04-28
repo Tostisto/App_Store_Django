@@ -34,13 +34,16 @@
             <tr>
                 <td>{{ app.name }}</td>
                 <td>{{ app.app_category }}</td>
-                <td><a href="https://google.com">Info</a></td>
+                <td><a href="/appDetail/{{ app.id }}">Info</a></td>
             </tr>
             {% endfor %}
         </table>
         {% else %}
-        <p>No apps found</p>
+        <h1 class="h1">No apps found</h1>
         {% endif %}
+
+        <button class="btn btn-primary" onclick="window.location.href='/'">Logout</button>
+
     </div>
 </body>
 
