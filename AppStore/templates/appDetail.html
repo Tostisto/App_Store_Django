@@ -18,7 +18,7 @@
     {% if app %}
 
         <h1 class="h1" >{{ app.name }}</h1>
-        <button type="button" class="btn btn-primary">Install</button>
+        <a type="button" class="btn btn-primary" href="/appDetail/{{app.id}}/{{user.id}}/installApp">Install</a>
         <p>{{ app.description}}</p>
 
         {% else %}

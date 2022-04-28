@@ -1,6 +1,7 @@
 from pydoc import describe
 from statistics import mode
 from django.db import models
+from django.utils import timezone
 
 class User(models.Model):
     first_name = models.CharField(max_length=20)
@@ -44,7 +45,7 @@ class AppCategory(models.Model):
 class Download(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     app = models.ForeignKey(App, on_delete=models.CASCADE)
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name + ' ' + self.app.name

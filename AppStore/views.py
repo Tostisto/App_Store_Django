@@ -136,12 +136,43 @@ def newApp(request, user_id):
         return render(request, 'newApp.html', {'form': form})
 
 
-def appDetail(request, app_id):
+def appDetail(request, app_id, user_id):
     # return render(request, 'appDetail.html')
     app = App.objects.filter(id=app_id)[0]
+    user = User.objects.get(id=user_id)
 
     template = loader.get_template('appDetail.html')
     context = {
-        'app': app
+        'app': app,
+        'user': user
     }
     return HttpResponse(template.render(context, request))
+
+
+def removeApp(request, app_id):
+    app = App.objects.get(id=app_id)
+    app.delete()
+    return redirect('/adminPage/' + str(request.user.id))
+
+def removeUser(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.delete()
+    return redirect('/adminPage/' + str(request.user.id))
+
+def removeDev(request, dev_id):
+    dev = Developer.objects.get(id=dev_id)
+    dev.delete()
+    return redirect('/adminPage/' + str(request.user.id))
+
+
+def installApp(request, app_id, user_id):
+    app = App.objects.get(id=app_id)
+    user = User.objects.get(id=user_id)
+
+    newDownload = Download(
+        app=app,
+        user=user
+    )
+    newDownload.save()
+
+    return redirect('/userPage/' + str(user_id))
