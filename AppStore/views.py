@@ -1,18 +1,20 @@
-from multiprocessing import context
 from django.shortcuts import render
 from django.http import HttpResponse
 from AppStore.forms import LoginForm
 from django.template import loader
 from django.shortcuts import redirect, render
-from .forms import AppReviewForm, DevRegisterForm, LoginForm, NewAppForm, RegisterForm, NewCategoryForm, UpdateAppForm
+from .forms import AppReviewForm, DevRegisterForm, LoginForm, NewAppForm, RegisterForm, NewCategoryForm, UpdateAppForm, ManageAccount
 from .models import User, App, AppCategory, App_review, Developer, Download
+
 
 def index(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            first_select = User.objects.all().filter(email = form.cleaned_data['email'])
-            second_select = first_select.filter(password = form.cleaned_data['password'])
+            first_select = User.objects.all().filter(
+                email=form.cleaned_data['email'])
+            second_select = first_select.filter(
+                password=form.cleaned_data['password'])
             if len(second_select) == 1:
                 if(second_select[0].role == 'admin'):
                     return redirect('/adminPage/' + str(second_select[0].id))
@@ -43,7 +45,7 @@ def devRegister(request):
     if request.method == 'POST':
         form = DevRegisterForm(request.POST)
         if form.is_valid():
-            
+
             newUse = User(
                 first_name=form.cleaned_data['fname'],
                 last_name=form.cleaned_data['lname'],
@@ -71,7 +73,6 @@ def devRegister(request):
         return render(request, 'devRegister.html', {'form': form})
 
 
-
 def userPage(request, user_id):
     user = User.objects.get(id=user_id)
     appsList = App.objects.all()
@@ -96,10 +97,11 @@ def devPage(request, user_id):
     }
     return HttpResponse(template.render(context, request))
 
+
 def adminPage(request, user_id):
     admin = User.objects.get(id=user_id)
     allDevs = Developer.objects.all()
-    allUsers = User.objects.all().filter(role = 'user')
+    allUsers = User.objects.all().filter(role='user')
     allApps = App.objects.all()
 
     template = loader.get_template('adminPage.html')
@@ -111,13 +113,14 @@ def adminPage(request, user_id):
     }
     return HttpResponse(template.render(context, request))
 
+
 def newApp(request, user_id):
     if request.method == 'POST':
         form = NewAppForm(request.POST)
         if form.is_valid():
             dev = Developer.objects.get(user=user_id)
 
-            ## Create new app object fill with form data and dev and save to db
+            # Create new app object fill with form data and dev and save to db
             newApp = App(
                 name=form.cleaned_data['name'],
                 version=form.cleaned_data['version'],
@@ -148,7 +151,7 @@ def appDetail(request, app_id, user_id):
                 app=app,
                 user=user,
                 text_review=form.cleaned_data['text_review'],
-                stars = form.cleaned_data['stars']
+                stars=form.cleaned_data['stars']
             )
             newReview.save()
             return redirect('/appDetail/' + str(app_id) + '/' + str(user_id))
@@ -190,7 +193,6 @@ def installApp(request, app_id, user_id):
     return redirect('/userPage/' + str(user_id))
 
 
-
 def newCategory(request, user_id):
     if request.method == 'POST':
         form = NewCategoryForm(request.POST)
@@ -207,7 +209,6 @@ def newCategory(request, user_id):
     else:
         form = NewCategoryForm()
         return render(request, 'newCategory.html', {'form': form})
-
 
 
 def updateApp(request, app_id, user_id):
@@ -229,5 +230,40 @@ def updateApp(request, app_id, user_id):
             return render(request, 'updateApp.html', {'form': form, 'app': app, 'user': user})
 
     else:
-        form = UpdateAppForm()
+        form = UpdateAppForm( initial= {
+            'name': app.name,
+            'version': app.version,
+            'description': app.description,
+            'app_category': app.app_category
+        })
         return render(request, 'updateApp.html', {'form': form, 'app': app, 'user': user})
+
+
+def manageAccount(request, user_id):
+    user = User.objects.get(id=user_id)
+
+    if request.method == 'POST':
+        form = ManageAccount(request.POST)
+        if form.is_valid():
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.nickname = form.cleaned_data['nickname']
+            user.email = form.cleaned_data['email']
+            user.phone = form.cleaned_data['phone']
+            user.password = form.cleaned_data['password']
+            user.save()
+
+            return redirect('/userPage/' + str(user_id))
+        else:
+            return render(request, 'manageAccount.html', {'form': form, 'user': user})
+
+    else:
+        form = ManageAccount(initial={
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'nickname': user.nickname,
+            'email': user.email,
+            'phone': user.phone,
+            'password': user.password
+        })
+        return render(request, 'manageAccount.html', {'form': form, 'user': user})
