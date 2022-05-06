@@ -30,13 +30,15 @@
                 <th>Category</th>
                 <th>Info</th>
                 <th>Update App</th>
+                <th>Remove App</th>
             </tr>
             {% for app in devApps %}
             <tr>
                 <td>{{ app.name }}</td>
                 <td>{{ app.app_category }}</td>
-                <td><a href="/appDetail/{{app.id}}/{{user.id}}">Info</a></td>
-                <td><a href="/devPage/{{user.id}}/{{app.id}}/updateApp">Update App</a></td>
+                <td><a type="button" class="btn btn-primary" href="/appDetail/{{app.id}}/{{user.id}}">Detail</a></td>
+                <td><a type="button" class="btn btn-primary" href="/devPage/{{user.id}}/{{app.id}}/updateApp">Update</a></td>
+                <td><a type="button" class="btn btn-danger" href="/devPage/{{user.id}}/{{app.id}}/removeApp">Remove</a></td>
             </tr>
             {% endfor %}
         </table>

@@ -22,6 +22,8 @@ class App(models.Model):
     description = models.TextField()
     app_category = models.ForeignKey('AppCategory', on_delete=models.CASCADE)
     developer = models.ForeignKey('Developer', on_delete=models.CASCADE)
+    appImage = models.ImageField(upload_to='images/')
+    appFile = models.FileField(upload_to='files/')
     
     def __str__(self):
         return self.name

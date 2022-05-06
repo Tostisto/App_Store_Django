@@ -17,6 +17,7 @@ urlpatterns = [
     path('appDetail/<int:app_id>/<int:user_id>/installApp/', views.installApp, name='installApp'),
     path('adminPage/<int:user_id>/newCategory/', views.newCategory, name='newCategory'),
     path('devPage/<int:user_id>/<int:app_id>/updateApp/', views.updateApp, name='updateApp'),
-
     path('userPage/<int:user_id>/manageAccount/', views.manageAccount, name='manageAccount'),
+    path('devPage/<int:user_id>/<int:app_id>/removeApp', views.devRemoveApp, name='removeApp'),
+    path('media/<path:path>', views.media, name='media'),
 ]

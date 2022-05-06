@@ -15,30 +15,38 @@
 </head>
 
 <body>
+    {% load crispy_forms_tags %}
+    <div class="d-flex justify-content-center">
 
-    <div class="container">
-        {% if app %}
-
-            <div>
-                <h3>Edit App</h3>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-md-center">
-                            <form method="post">
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <br>
-                                <button type="submit" class="btn btn-primary">Add Review</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-outline mb-4 row">
+                {{form.name|as_crispy_field}}
             </div>
 
-        {% else %}
-            <p>App not found</p>
-        {% endif%}
-    </div>
+            <div class="form-outline mb-4 row">
+                {{form.version|as_crispy_field}}
+            </div>
 
+            <div class="form-outline mb-4 row">
+                {{form.app_category|as_crispy_field}}
+            </div>
+
+            <div class="form-outline mb-4 row">
+                {{form.description|as_crispy_field}}
+            </div>
+
+            <div class="form-outline mb-4 row">
+                <button type="submit" class="btn btn-primary">Update App</button>
+            </div>
+
+        </form>
+    </div>
 </body>
+
+
+
+
+
+
 </html>

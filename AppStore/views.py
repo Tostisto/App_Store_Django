@@ -1,5 +1,7 @@
+import os
+from django.conf import settings
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from AppStore.forms import LoginForm
 from django.template import loader
 from django.shortcuts import redirect, render
@@ -33,7 +35,7 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'login.html', {'form': LoginForm()})
+            return redirect('/')
         else:
             return render(request, 'register.html', {'form': form})
     else:
@@ -116,17 +118,17 @@ def adminPage(request, user_id):
 
 def newApp(request, user_id):
     if request.method == 'POST':
-        form = NewAppForm(request.POST)
+        form = NewAppForm(request.POST, request.FILES) 
         if form.is_valid():
             dev = Developer.objects.get(user=user_id)
-
-            # Create new app object fill with form data and dev and save to db
             newApp = App(
                 name=form.cleaned_data['name'],
                 version=form.cleaned_data['version'],
                 description=form.cleaned_data['description'],
                 app_category=form.cleaned_data['app_category'],
-                developer=dev
+                developer=dev,
+                appImage = form.cleaned_data['appImage'],
+                appFile = form.cleaned_data['appFile']
             )
             newApp.save()
 
@@ -190,7 +192,9 @@ def installApp(request, app_id, user_id):
     )
     newDownload.save()
 
-    return redirect('/userPage/' + str(user_id))
+    return redirect("/media/" + str(app.appFile))
+
+    # return redirect('/userPage/' + str(user_id))
 
 
 def newCategory(request, user_id):
@@ -216,7 +220,7 @@ def updateApp(request, app_id, user_id):
     user = User.objects.get(id=user_id)
 
     if request.method == 'POST':
-        form = UpdateAppForm(request.POST)
+        form = UpdateAppForm(request.POST, request.FILES)
         if form.is_valid():
             app.name = form.cleaned_data['name']
             app.version = form.cleaned_data['version']
@@ -267,3 +271,17 @@ def manageAccount(request, user_id):
             'password': user.password
         })
         return render(request, 'manageAccount.html', {'form': form, 'user': user})
+
+def devRemoveApp(request,user_id, app_id):
+    app = App.objects.get(id=app_id)
+    app.delete()
+    return redirect('/devPage/' + str(user_id))
+
+def media(requers, path):
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    raise Http404

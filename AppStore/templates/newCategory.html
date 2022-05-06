@@ -15,12 +15,23 @@
 </head>
 
 <body>
-    <div class="container">
-        <h1>New App Category</h1>
+    <div class="d-flex justify-content-center">
+        <h1>New Category</h1>
+    </div>
+
+    {% load crispy_forms_tags %}
+    <div class="d-flex justify-content-center">
+
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Add Category</button>
+            <div class="form-outline mb-4 row">
+                {{form.name|as_crispy_field}}
+            </div>
+
+            <div class="form-outline mb-4 row">
+                <button type="submit" class="btn btn-primary">Add New Category</button>
+            </div>
+
         </form>
     </div>
 </body>

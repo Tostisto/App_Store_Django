@@ -18,74 +18,85 @@
 
     <div class="container">
         {% if app %}
-            <p>             
-                <h1 class="h1">{{ app.name }}</h1>
-                {% load static %}<img src='{% static "AppStore/media/facebook.png" %}' width="100px" alt="home" />
-            </p>
+        <p>
+        <h1 class="h1">{{ app.name }}</h1>
+        <img src="{{ app.appImage.url}}" alt="connect" style="max-height:300px">
+        </p>
 
-            <a type="button" class="btn btn-primary" href="/appDetail/{{app.id}}/{{user.id}}/installApp">Install</a>
+        <a type="button" class="btn btn-primary" href="/appDetail/{{app.id}}/{{user.id}}/installApp">Install</a>
 
-            <br><br><br>
+        <br><br><br>
 
-            <h3>App description</h3>
-            <div>
+        <h3>App description</h3>
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">{{ app.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        {% if reviews %}
+        <h2>Reviews</h2>
+        <div class="row">
+            {% for review in reviews %}
+            <div class="col-sm-4">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-text">{{ app.description }}</p>
+                        <h5 class="card-title"><b>{{ review.user.first_name }} {{ review.user.last_name }}</b></h5>
+                        <p class="card-text">Stars: {{ review.stars }}</p>
+                        <p class="card-text">{{ review.text_review }}</p>
                     </div>
                 </div>
             </div>
 
-            <br>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">App don't have reviews.</h5>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
-            {% if reviews %}
-                <h2>Reviews</h2>
-            <div class="row">
-                {% for review in reviews %}
-                    <div class="col-sm-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ review.user.first_name }} {{ review.user.last_name }}</h5>
-                                <p class="card-text">Stars: {{ review.stars }}</p>
-                                <p class="card-text">{{ review.text_review }}</p>
+        <br>
+
+        <div>
+            <h3>Add Review</h3>
+
+            <div class="card">
+                <div class="card-body">
+                    {% load crispy_forms_tags %}
+                    <div class="d-flex justify-content-center">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-outline mb-4 row">
+                                {{form.text_review|as_crispy_field}}
                             </div>
-                        </div>
-                    </div>
 
-                    {% endfor %}
-            </div>
-            {% else %}
-                <div>
-                    <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">App don't have reviews.</h5>
-                    </div>
-                    </div>
-                </div>
-            {% endif %}
+                            <div class="form-outline mb-4 row">
+                                {{form.stars|as_crispy_field}}
+                            </div>
 
-                <br>
-
-            <div>
-                <h3>Add Review</h3>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-md-center">
-                            <form method="post">
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <br>
+                            <div class="row">
                                 <button type="submit" class="btn btn-primary">Add Review</button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
 
         {% else %}
-            <p>App not found</p>
+        <p>App not found</p>
         {% endif%}
     </div>
 
 </body>
+
 </html>

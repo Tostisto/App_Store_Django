@@ -27,6 +27,9 @@ class NewAppForm(forms.Form):
     description = forms.CharField(label='Description', widget=forms.Textarea)
     app_category = forms.ModelChoiceField(queryset=AppCategory.objects.all())
 
+    appImage = forms.ImageField(label="AppImage", required=True)
+    appFile = forms.FileField(label="AppFile", required=True)
+
 
 class NewCategoryForm(forms.Form):
     name = forms.CharField(label='Name', max_length=20)

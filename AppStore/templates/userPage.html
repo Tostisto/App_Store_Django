@@ -38,22 +38,20 @@
 
         <div class="row row-cols-1 row-cols-md-4 g-4">
         {% for app in appsList %}
+
         <div class="col">
             <div class="card">
-                <div class="card-body">
-                  <h3 class="card-title">{{ app.name }}</h3>
-                </div>
-                <ul class="list-group list-group-flush">
-                  <li class="list-group-item">Dev: <b>{{ app.developer.user.nickname }}</b> </li>
-                  <li class="list-group-item">Category: <b>{{ app.app_category.name }}</b> </li>
-                </ul>
-                <div class="card-body">
-                  <a href="/appDetail/{{ app.id }}/{{user.id}}" class="card-link"><b>Detail</b></a>
-                  <a href="/appDetail/{{app.id}}/{{user.id}}/installApp" class="card-link">Install</a>
-                </div>
+              <img src="{{app.appImage.url}}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">{{ app.name }}</h5>
+                <p class="card-text">Category: {{ app.app_category }}</p>
+              </div>
+              <div class="card-body">
+                <a href="/appDetail/{{ app.id }}/{{user.id}}" class="card-link"><b>Detail</b></a>
+                <a href="/appDetail/{{app.id}}/{{user.id}}/installApp" class="card-link">Install</a>
+              </div>
             </div>
-        </div>
-
+          </div>
         {% endfor %}
         </div>  
 
