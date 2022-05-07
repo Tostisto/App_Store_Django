@@ -83,8 +83,12 @@ def devRegister(request):
 
 
 def userPage(request):
-    # user = User.objects.get(id=user_id)
-    user = request.session['userId']
+    user =  User.objects.get(id=request.session['userId'])
+
+    if(user.role != 'user'):
+        del request.session['userId']
+        return redirect('/')
+
     appsList = App.objects.all()
     template = loader.get_template('userPage.html')
     context = {
@@ -96,6 +100,11 @@ def userPage(request):
 
 def devPage(request):
     user = User.objects.get(id=request.session['userId'])
+
+    if user.role != 'developer':
+        del request.session['userId']
+        return redirect('/')
+
     dev = Developer.objects.get(user=user.id)
     devApps = App.objects.all().filter(developer=dev)
 
@@ -110,6 +119,11 @@ def devPage(request):
 
 def adminPage(request):
     admin = User.objects.get(id=request.session['userId'])
+
+    if admin.role != 'admin':
+        del request.session['userId']
+        return redirect('/')
+
     allDevs = Developer.objects.all()
     allUsers = User.objects.all().filter(role='user')
     allApps = App.objects.all()
@@ -126,6 +140,11 @@ def adminPage(request):
 
 
 def newApp(request):
+    user = User.objects.get(id=request.session['userId'])
+    if user.role != 'developer':
+        del request.session['userId']
+        return redirect('/')
+
     if request.method == 'POST':
         form = NewAppForm(request.POST, request.FILES)
 
@@ -177,24 +196,44 @@ def appDetail(request, app_id):
 
 
 def removeApp(request, app_id):
+    user = User.objects.get(id=request.session['userId'])
+    if user.role != 'admin':
+        del request.session['userId']
+        return redirect('/')
+
     app = App.objects.get(id=app_id)
     app.delete()
     return redirect('/adminPage')
 
 
 def removeUser(request, user_id):
+    user = User.objects.get(id=request.session['userId'])
+    if user.role != 'admin':
+        del request.session['userId']
+        return redirect('/')
+
     user = User.objects.get(id=user_id)
     user.delete()
     return redirect('/adminPage')
 
 
 def removeDev(request, dev_id):
+    user = User.objects.get(id=request.session['userId'])
+    if user.role != 'admin':
+        del request.session['userId']
+        return redirect('/')
+
+
     dev = Developer.objects.get(id=dev_id)
     dev.delete()
     return redirect('/adminPage')
 
 
 def installApp(request, app_id):
+    if 'userId' not in request.session:
+        return redirect('/')
+
+
     app = App.objects.get(id=app_id)
     user = User.objects.get(id=request.session['userId'])
 
@@ -208,6 +247,11 @@ def installApp(request, app_id):
 
 
 def newCategory(request):
+    user = User.objects.get(id=request.session['userId'])
+    if user.role != 'admin':
+        del request.session['userId']
+        return redirect('/')
+
     if request.method == 'POST':
         form = NewCategoryForm(request.POST)
         if form.is_valid():
@@ -228,6 +272,10 @@ def newCategory(request):
 def updateApp(request, app_id):
     app = App.objects.get(id=app_id)
     user = User.objects.get(id=request.session['userId'])
+
+    if user.role != 'developer':
+        del request.session['userId']
+        return redirect('/')
 
     if request.method == 'POST':
         form = UpdateAppForm(request.POST, request.FILES)
@@ -254,6 +302,9 @@ def updateApp(request, app_id):
 
 
 def manageAccount(request):
+    if 'userId' not in request.session:
+        return redirect('/')
+
     user = User.objects.get(id=request.session['userId'])
 
     if request.method == 'POST':
@@ -284,12 +335,55 @@ def manageAccount(request):
         })
         return render(request, 'manageAccount.html', {'form': form, 'user': user})
 
+def manageAccountDev(request):
+    if 'userId' not in request.session:
+        return redirect('/')
+
+    user = User.objects.get(id=request.session['userId'])
+
+    if request.method == 'POST':
+        form = ManageAccount(request.POST)
+        if form.is_valid():
+            user.nickname = form.cleaned_data['nickname']
+            user.email = form.cleaned_data['email']
+            user.phone = form.cleaned_data['phone']
+
+            if user.password != form.cleaned_data['old_password']:
+                user.save()
+            else:
+                user.password = form.cleaned_data['password']
+                user.save()
+            
+            return redirect('/devPage')
+        else:
+            return render(request, 'manageAccount.html', {'form': form, 'user': user})
+
+    else:
+        form = ManageAccount(initial={
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'nickname': user.nickname,
+            'email': user.email,
+            'phone': user.phone,
+            'password': user.password
+        })
+        return render(request, 'manageAccount.html', {'form': form, 'user': user})
+
 def devRemoveApp(request, app_id):
+    user = User.objects.get(id=request.session['userId'])
+    
+    if user.role != 'developer':
+        del request.session['userId']
+        return redirect('/')
+
     app = App.objects.get(id=app_id)
     app.delete()
     return redirect('/devPage')
 
-def media(requers, path):
+def media(request, path):
+    if 'userId' not in request.session:
+        return redirect('/')
+
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as fh:

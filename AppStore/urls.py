@@ -14,7 +14,7 @@ urlpatterns = [
     path('devPage', views.devPage, name='devPage'),
     path('devPage/newApp/', views.newApp, name='newApp'),
     path('devPage/<int:app_id>/updateApp/', views.updateApp, name='updateApp'),
-    path('devPage/<int:user_id>/manageAccount/', views.manageAccount, name='manageAccount'),
+    path('devPage/manageAccount/', views.manageAccountDev, name='manageAccount'),
     path('devPage/<int:app_id>/removeApp', views.devRemoveApp, name='removeApp'),
 
     path('adminPage', views.adminPage, name='adminPage'),
