@@ -2,17 +2,51 @@
 
 {% block content %}
 
-    <div class="d-flex justify-content-md-center">
-        <div class="card">
-            <h5 class="card-header">Register for Developer</h5>
-            <div class="card-body">
+<div class="d-flex justify-content-md-center">
+    <div class="card">
+        <h5 class="card-header">Register for Developer</h5>
+            {% load crispy_forms_tags %}
+            <div class="d-flex justify-content-center" style="padding-right: 10rem; padding-left: 10rem; padding-top: 2rem; padding-bottom: 2rem;">
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <div class="form-outline mb-4 row">
+                        {{form.fname|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.lname|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.nickname|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.password|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.email|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.phone|as_crispy_field}}
+                    </div>
+
+
+                    <div class="form-outline mb-4 row">
+                        {{form.Country|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
                 </form>
             </div>
-          </div>
+        </div> 
     </div>
+</div>
+
+
 
 {% endblock content %}

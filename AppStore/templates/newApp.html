@@ -2,40 +2,46 @@
 
 {% block content %}
 
-    {% load crispy_forms_tags %}
-    <div class="d-flex justify-content-center">
+<div class="d-flex justify-content-md-center">
+    <div class="card">
+        <h5 class="card-header">New App</h5>
+            {% load crispy_forms_tags %}
+            <div class="d-flex justify-content-center" style="padding-right: 10rem; padding-left: 10rem; padding-top: 2rem; padding-bottom: 2rem;">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4 row">
+                        {{form.name|as_crispy_field}}
+                    </div>
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-outline mb-4 row">
-                {{form.name|as_crispy_field}}
+                    <div class="form-outline mb-4 row">
+                        {{form.version|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.app_category|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.description|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.appImage|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.appFile|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        <button type="submit" class="btn btn-primary">Add App</button>
+                    </div>
+
+                </form>
             </div>
-
-            <div class="form-outline mb-4 row">
-                {{form.version|as_crispy_field}}
-            </div>
-
-            <div class="form-outline mb-4 row">
-                {{form.app_category|as_crispy_field}}
-            </div>
-
-            <div class="form-outline mb-4 row">
-                {{form.description|as_crispy_field}}
-            </div>
-
-            <div class="form-outline mb-4 row">
-                {{form.appImage|as_crispy_field}}
-            </div>
-
-            <div class="form-outline mb-4 row">
-                {{form.appFile|as_crispy_field}}
-            </div>
-
-            <div class="form-outline mb-4 row">
-                <button type="submit" class="btn btn-primary">Add App</button>
-            </div>
-
-        </form>
+        </div>
     </div>
+</div>
+
     
 {% endblock content %}

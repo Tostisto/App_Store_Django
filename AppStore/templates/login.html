@@ -2,24 +2,32 @@
 
 {% block content %}
 
-    {% load crispy_forms_tags %}
-    <div class="d-flex justify-content-center">
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-outline mb-4 row">
-                {{form.email|as_crispy_field}}
-            </div>
+<div class="d-flex justify-content-md-center">
+    <div class="card">
+        <h5 class="card-header">Login</h5>
+            {% load crispy_forms_tags %}
+            <div class="d-flex justify-content-center" style="padding-right: 10rem; padding-left: 10rem; padding-top: 2rem; padding-bottom: 2rem;">
+                <form method="post">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-outline mb-4 row">
+                            {{form.email|as_crispy_field}}
+                        </div>
 
-            <div class="form-outline mb-4 row">
-                {{form.password|as_crispy_field}}
-            </div>
+                        <div class="form-outline mb-4 row">
+                            {{form.password|as_crispy_field}}
+                        </div>
 
-            <div class="form-outline mb-4 row">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
+                        <div class="form-outline mb-4 row">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
 
-            <p>You can register <a href="register">HERE</a></p>
-        </form>
+                        <p>You can register <a href="register">HERE</a></p>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
     
 {% endblock content %}
