@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "devBase.html" %}
 
 {% block content %}
 
@@ -31,10 +31,6 @@
         {% else %}
         <p>No apps found</p>
         {% endif %}
-
-        <button type="button" class="btn btn-primary" onclick="window.location.href='newApp/'">New App</button>
-
-        <button class="btn btn-primary" onclick="window.location.href='/'">Logout</button>
     </div>
 
 {% endblock content %}

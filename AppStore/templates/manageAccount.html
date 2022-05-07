@@ -1,18 +1,36 @@
-{% extends "base.html" %}
+{% extends "userBase.html" %}
 
 {% block content %}
 
-    <div class="d-flex justify-content-md-center">
-        <div class="card">
-            <h5 class="card-header">Account Setting</h5>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Update Account</button>
-                </form>
+    {% load crispy_forms_tags %}
+    <div class="d-flex justify-content-center">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-outline mb-4 row">
+                {{form.nickname|as_crispy_field}}
             </div>
-          </div>
+            
+            <div class="form-outline mb-4 row">
+                {{form.email|as_crispy_field}}
+            </div>
+
+            <div class="form-outline mb-4 row">
+                {{form.phone|as_crispy_field}}
+            </div>
+
+            <div class="form-outline mb-4 row">
+                {{form.old_password|as_crispy_field}}
+            </div>
+
+            <div class="form-outline mb-4 row">
+                {{form.password|as_crispy_field}}
+            </div>
+
+            <div class="form-outline mb-4 row">
+                <button type="submit" class="btn btn-primary">Update User</button>
+            </div>
+        </form>
     </div>
-    
+
 {% endblock content %}

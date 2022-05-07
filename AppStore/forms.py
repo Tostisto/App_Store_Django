@@ -48,9 +48,8 @@ class UpdateAppForm(forms.Form):
 
 
 class ManageAccount(forms.Form):
-    first_name = forms.CharField(label='FirstName', max_length=20)
-    last_name = forms.CharField(label='Surname', max_length=20)
     nickname = forms.CharField(label='Nickname', max_length=20)
+    old_password = forms.CharField(label="Old Password", widget=forms.PasswordInput)
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
     email = forms.EmailField(label='Email')
     phone = forms.CharField(label='Phone', max_length=20)

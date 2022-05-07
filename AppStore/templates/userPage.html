@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "userBase.html" %}
 
 {% block content %}
 
@@ -30,12 +30,6 @@
         {% else %}
             <h1 class="h1">No apps found</h1>
         {% endif %}
-
-        <br>
-
-        <button class="btn btn-primary" onclick="window.location.href='/'">Logout</button>
-
-        <button class="btn btn-primary" onclick="window.location.href='/userPage/{{user.id}}/manageAccount'">Account Setting</button>
 
     </div>
     

@@ -108,6 +108,7 @@ def adminPage(request, user_id):
 
     template = loader.get_template('adminPage.html')
     context = {
+        'user': admin,
         'devs': allDevs,
         'apps': allApps,
         'users': allUsers,
@@ -137,8 +138,9 @@ def newApp(request, user_id):
             return render(request, 'newApp.html', {'form': form})
 
     else:
+        user = User.objects.get(id=user_id)
         form = NewAppForm()
-        return render(request, 'newApp.html', {'form': form})
+        return render(request, 'newApp.html', {'form': form, 'user': user})
 
 
 def appDetail(request, app_id, user_id):
@@ -194,8 +196,6 @@ def installApp(request, app_id, user_id):
 
     return redirect("/media/" + str(app.appFile))
 
-    # return redirect('/userPage/' + str(user_id))
-
 
 def newCategory(request, user_id):
     if request.method == 'POST':
@@ -211,8 +211,9 @@ def newCategory(request, user_id):
             return render(request, 'newCategory.html', {'form': form})
 
     else:
+        user = User.objects.get(id=user_id)
         form = NewCategoryForm()
-        return render(request, 'newCategory.html', {'form': form})
+        return render(request, 'newCategory.html', {'form': form, 'user': user})
 
 
 def updateApp(request, app_id, user_id):
@@ -249,14 +250,16 @@ def manageAccount(request, user_id):
     if request.method == 'POST':
         form = ManageAccount(request.POST)
         if form.is_valid():
-            user.first_name = form.cleaned_data['first_name']
-            user.last_name = form.cleaned_data['last_name']
             user.nickname = form.cleaned_data['nickname']
             user.email = form.cleaned_data['email']
             user.phone = form.cleaned_data['phone']
-            user.password = form.cleaned_data['password']
-            user.save()
 
+            if user.password != form.cleaned_data['old_password']:
+                user.save()
+            else:
+                user.password = form.cleaned_data['password']
+                user.save()
+            
             return redirect('/userPage/' + str(user_id))
         else:
             return render(request, 'manageAccount.html', {'form': form, 'user': user})
