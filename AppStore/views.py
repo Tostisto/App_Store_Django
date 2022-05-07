@@ -19,11 +19,14 @@ def index(request):
                 password=form.cleaned_data['password'])
             if len(second_select) == 1:
                 if(second_select[0].role == 'admin'):
-                    return redirect('/adminPage/' + str(second_select[0].id))
+                    request.session['userId'] = second_select[0].id # Session
+                    return redirect('/adminPage')
                 elif (second_select[0].role == 'developer'):
-                    return redirect('/devPage/' + str(second_select[0].id))
+                    request.session['userId'] = second_select[0].id # Session
+                    return redirect('/devPage')
                 else:
-                    return redirect('/userPage/' + str(second_select[0].id))
+                    request.session['userId'] = second_select[0].id # Session
+                    return redirect('/userPage')
     else:
         form = LoginForm()
 
@@ -41,6 +44,10 @@ def register(request):
     else:
         form = RegisterForm()
         return render(request, 'register.html', {'form': form})
+
+def logout(request):
+    del request.session['userId']
+    return redirect('/')
 
 
 def devRegister(request):
@@ -66,7 +73,7 @@ def devRegister(request):
             )
             newDev.save()
 
-            return render(request, 'login.html', {'form': LoginForm()})
+            return redirect('/')
 
         else:
             return render(request, 'devRegister.html', {'form': form})
@@ -75,8 +82,9 @@ def devRegister(request):
         return render(request, 'devRegister.html', {'form': form})
 
 
-def userPage(request, user_id):
-    user = User.objects.get(id=user_id)
+def userPage(request):
+    # user = User.objects.get(id=user_id)
+    user = request.session['userId']
     appsList = App.objects.all()
     template = loader.get_template('userPage.html')
     context = {
@@ -86,9 +94,9 @@ def userPage(request, user_id):
     return HttpResponse(template.render(context, request))
 
 
-def devPage(request, user_id):
-    user = User.objects.get(id=user_id)
-    dev = Developer.objects.get(user=user_id)
+def devPage(request):
+    user = User.objects.get(id=request.session['userId'])
+    dev = Developer.objects.get(user=user.id)
     devApps = App.objects.all().filter(developer=dev)
 
     template = loader.get_template('devPage.html')
@@ -100,8 +108,8 @@ def devPage(request, user_id):
     return HttpResponse(template.render(context, request))
 
 
-def adminPage(request, user_id):
-    admin = User.objects.get(id=user_id)
+def adminPage(request):
+    admin = User.objects.get(id=request.session['userId'])
     allDevs = Developer.objects.all()
     allUsers = User.objects.all().filter(role='user')
     allApps = App.objects.all()
@@ -117,11 +125,13 @@ def adminPage(request, user_id):
     return HttpResponse(template.render(context, request))
 
 
-def newApp(request, user_id):
+def newApp(request):
     if request.method == 'POST':
-        form = NewAppForm(request.POST, request.FILES) 
+        form = NewAppForm(request.POST, request.FILES)
+
         if form.is_valid():
-            dev = Developer.objects.get(user=user_id)
+            user = User.objects.get(id=request.session['userId']) 
+            dev = Developer.objects.get(user=user.id)
             newApp = App(
                 name=form.cleaned_data['name'],
                 version=form.cleaned_data['version'],
@@ -133,19 +143,19 @@ def newApp(request, user_id):
             )
             newApp.save()
 
-            return redirect('/devPage/' + str(user_id))
+            return redirect('/devPage')
         else:
             return render(request, 'newApp.html', {'form': form})
 
     else:
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(id=request.session['userId']) 
         form = NewAppForm()
         return render(request, 'newApp.html', {'form': form, 'user': user})
 
 
-def appDetail(request, app_id, user_id):
+def appDetail(request, app_id):
     app = App.objects.get(id=app_id)
-    user = User.objects.get(id=user_id)
+    user = User.objects.get(id=request.session['userId'])
     reviews = App_review.objects.all().filter(app=app)
 
     if request.method == 'POST':
@@ -158,7 +168,7 @@ def appDetail(request, app_id, user_id):
                 stars=form.cleaned_data['stars']
             )
             newReview.save()
-            return redirect('/appDetail/' + str(app_id) + '/' + str(user_id))
+            return redirect('/appDetail/' + str(app_id))
         else:
             return render(request, 'appDetail.html', {'form': form, 'app': app, 'user': user, 'reviews': reviews})
     else:
@@ -169,24 +179,24 @@ def appDetail(request, app_id, user_id):
 def removeApp(request, app_id):
     app = App.objects.get(id=app_id)
     app.delete()
-    return redirect('/adminPage/' + str(request.user.id))
+    return redirect('/adminPage')
 
 
 def removeUser(request, user_id):
     user = User.objects.get(id=user_id)
     user.delete()
-    return redirect('/adminPage/' + str(request.user.id))
+    return redirect('/adminPage')
 
 
 def removeDev(request, dev_id):
     dev = Developer.objects.get(id=dev_id)
     dev.delete()
-    return redirect('/adminPage/' + str(request.user.id))
+    return redirect('/adminPage')
 
 
-def installApp(request, app_id, user_id):
+def installApp(request, app_id):
     app = App.objects.get(id=app_id)
-    user = User.objects.get(id=user_id)
+    user = User.objects.get(id=request.session['userId'])
 
     newDownload = Download(
         app=app,
@@ -197,7 +207,7 @@ def installApp(request, app_id, user_id):
     return redirect("/media/" + str(app.appFile))
 
 
-def newCategory(request, user_id):
+def newCategory(request):
     if request.method == 'POST':
         form = NewCategoryForm(request.POST)
         if form.is_valid():
@@ -206,19 +216,18 @@ def newCategory(request, user_id):
             )
             newCat.save()
 
-            return redirect('/adminPage/' + str(user_id))
+            return redirect('/adminPage')
         else:
             return render(request, 'newCategory.html', {'form': form})
 
     else:
-        user = User.objects.get(id=user_id)
         form = NewCategoryForm()
-        return render(request, 'newCategory.html', {'form': form, 'user': user})
+        return render(request, 'newCategory.html', {'form': form})
 
 
-def updateApp(request, app_id, user_id):
+def updateApp(request, app_id):
     app = App.objects.get(id=app_id)
-    user = User.objects.get(id=user_id)
+    user = User.objects.get(id=request.session['userId'])
 
     if request.method == 'POST':
         form = UpdateAppForm(request.POST, request.FILES)
@@ -230,7 +239,7 @@ def updateApp(request, app_id, user_id):
 
             app.save()
 
-            return redirect('/devPage/' + str(user_id))
+            return redirect('/devPage')
         else:
             return render(request, 'updateApp.html', {'form': form, 'app': app, 'user': user})
 
@@ -244,8 +253,8 @@ def updateApp(request, app_id, user_id):
         return render(request, 'updateApp.html', {'form': form, 'app': app, 'user': user})
 
 
-def manageAccount(request, user_id):
-    user = User.objects.get(id=user_id)
+def manageAccount(request):
+    user = User.objects.get(id=request.session['userId'])
 
     if request.method == 'POST':
         form = ManageAccount(request.POST)
@@ -260,7 +269,7 @@ def manageAccount(request, user_id):
                 user.password = form.cleaned_data['password']
                 user.save()
             
-            return redirect('/userPage/' + str(user_id))
+            return redirect('/userPage')
         else:
             return render(request, 'manageAccount.html', {'form': form, 'user': user})
 
@@ -275,10 +284,10 @@ def manageAccount(request, user_id):
         })
         return render(request, 'manageAccount.html', {'form': form, 'user': user})
 
-def devRemoveApp(request,user_id, app_id):
+def devRemoveApp(request, app_id):
     app = App.objects.get(id=app_id)
     app.delete()
-    return redirect('/devPage/' + str(user_id))
+    return redirect('/devPage')
 
 def media(requers, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)

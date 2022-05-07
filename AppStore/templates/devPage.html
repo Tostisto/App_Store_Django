@@ -22,9 +22,9 @@
             <tr>
                 <td>{{ app.name }}</td>
                 <td>{{ app.app_category }}</td>
-                <td><a type="button" class="btn btn-primary" href="/appDetail/{{app.id}}/{{user.id}}">Detail</a></td>
-                <td><a type="button" class="btn btn-primary" href="/devPage/{{user.id}}/{{app.id}}/updateApp">Update</a></td>
-                <td><a type="button" class="btn btn-danger" href="/devPage/{{user.id}}/{{app.id}}/removeApp">Remove</a></td>
+                <td><a type="button" class="btn btn-primary" href="/appDetail/{{app.id}}">Detail</a></td>
+                <td><a type="button" class="btn btn-primary" href="/devPage/{{app.id}}/updateApp">Update</a></td>
+                <td><a type="button" class="btn btn-danger" href="/devPage/{{app.id}}/removeApp">Remove</a></td>
             </tr>
             {% endfor %}
         </table>

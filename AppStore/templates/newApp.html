@@ -5,7 +5,7 @@
     {% load crispy_forms_tags %}
     <div class="d-flex justify-content-center">
 
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-outline mb-4 row">
                 {{form.name|as_crispy_field}}

@@ -71,7 +71,7 @@
                         <td>{{app.name}}</td>
                         <td>{{app.developer.user.nickname}}</td>
                         <td>{{app.app_category.name}}</td>
-                        <td><a type="button" class="btn btn-primary" href="/appDetail/{{ app.id }}/{{user.id}}">Detail</a></td>
+                        <td><a type="button" class="btn btn-primary" href="/appDetail/{{ app.id }}">Detail</a></td>
                         <th><a type="button" class="btn btn-danger" href="/removeApp/{{app.id}}">Remove App</a></th>
                     </tr>
                     {% endfor %}
