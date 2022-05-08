@@ -69,8 +69,11 @@ def devRegister(request):
 
             newDev = Developer(
                 user_id=newUse.id,
-                country=form.cleaned_data['Country']
-            )
+                country=form.cleaned_data['country'],
+                company=form.cleaned_data['company'],
+                website=form.cleaned_data['website'],
+                company_description=form.cleaned_data['company_description'],
+                )
             newDev.save()
 
             return redirect('/')

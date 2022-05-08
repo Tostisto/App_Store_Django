@@ -19,7 +19,11 @@ class DevRegisterForm(forms.Form):
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
     email = forms.EmailField(label="Email")
     phone = forms.CharField(label="Phone", max_length=20)
-    Country = forms.CharField(label="Country", max_length=20)
+    country = forms.CharField(label="Country", max_length=20)
+    company = forms.CharField(label="Company", max_length=20)
+    website = forms.CharField(label="Website", max_length=20)
+    company_description = forms.CharField(widget=forms.Textarea, label="Company_description")
+
 
 class NewAppForm(forms.Form):
     name = forms.CharField(label='Name', max_length=20)
