@@ -20,7 +20,9 @@ urlpatterns = [
     path('devPage/<int:app_id>/removeApp', views.devRemoveApp, name='removeApp'),
 
     path('adminPage', views.adminPage, name='adminPage'),
+    path('adminPage/manageCategory', views.manageCategory, name='manageCategory'),
     path('adminPage/newCategory', views.newCategory, name='newCategory'),
+    path('adminPage/<int:category_id>/removeCategory', views.removeCategory, name='removeCategory'),
 
 
     path('appDetail/<int:app_id>/', views.appDetail, name='appDetail'),

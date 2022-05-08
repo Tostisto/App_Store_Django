@@ -246,6 +246,27 @@ def installApp(request, app_id):
     return redirect("/media/" + str(app.appFile))
 
 
+def manageCategory(request):
+    user = User.objects.get(id=request.session['userId'])
+    if user.role != 'admin':
+        del request.session['userId']
+        return redirect('/')
+
+    categories = AppCategory.objects.all()
+    return render(request, 'manageCategory.html', {'categories': categories})
+
+
+def removeCategory(request, category_id):
+    user = User.objects.get(id=request.session['userId'])
+    if user.role != 'admin':
+        del request.session['userId']
+        return redirect('/')
+
+    category = AppCategory.objects.get(id=category_id)
+    category.delete()
+    return redirect('/adminPage/manageCategory')
+
+
 def newCategory(request):
     user = User.objects.get(id=request.session['userId'])
     if user.role != 'admin':
@@ -260,7 +281,7 @@ def newCategory(request):
             )
             newCat.save()
 
-            return redirect('/adminPage')
+            return redirect('/adminPage/manageCategory')
         else:
             return render(request, 'newCategory.html', {'form': form})
 
