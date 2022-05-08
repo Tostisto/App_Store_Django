@@ -1,36 +1,57 @@
+<script>
+
+  function search() {
+    var apps = document.getElementsByClassName("App");
+    let searchText = document.getElementById("searchText").value;
+
+    for (var i = 0; i < apps.length; i++) {
+      if (apps[i].innerHTML.toLowerCase().includes(searchText.toLowerCase())) {
+        apps[i].style.display = "block";
+      }
+      else {
+        apps[i].style.display = "none";
+      }
+    }
+  }
+</script>
+
 {% extends "userBase.html" %}
 
 {% block content %}
 
-    <div class="container">
-        <h1>Apps</h1>
+<div class="container">
+  <h1>Apps</h1>
 
-        {% if appsList %}
+  <div class="row" style="padding: 3rem;">
+    <input oninput="search()" id="searchText" class="form-control mr-sm-2" type="search" placeholder="Search"
+      aria-label="Search" style="width: 25%;">
+  </div>
 
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-        {% for app in appsList %}
+  {% if appsList %}
+  <div class="row row-cols-1 row-cols-md-4 g-4">
+    {% for app in appsList %}
 
-        <div class="col">
-            <div class="card">
-              <img src="{{app.appImage.url}}" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">{{ app.name }}</h5>
-                <p class="card-text">Category: {{ app.app_category }}</p>
-              </div>
-              <div class="card-body">
-                <a href="/appDetail/{{ app.id }}" class="card-link"><b>Detail</b></a>
-                <a href="/installApp/{{ app.id }}" class="card-link">Install</a>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-        </div>  
-
-
-        {% else %}
-            <h1 class="h1">No apps found</h1>
-        {% endif %}
-
+    <div class="App col" id="{{app.name}}">
+      <div class="card">
+        <img src="{{app.appImage.url}}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{ app.name }}</h5>
+          <p class="card-text">Category: {{ app.app_category }}</p>
+        </div>
+        <div class="card-body">
+          <a href="/appDetail/{{ app.id }}" class="card-link"><b>Detail</b></a>
+          <a href="/installApp/{{ app.id }}" class="card-link">Install</a>
+        </div>
+      </div>
     </div>
-    
-{% endblock content %}  
+    {% endfor %}
+  </div>
+
+
+  {% else %}
+  <h1 class="h1">No apps found</h1>
+  {% endif %}
+
+</div>
+
+{% endblock content %}
