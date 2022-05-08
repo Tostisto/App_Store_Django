@@ -10,6 +10,8 @@ urlpatterns = [
 
     path('userPage/', views.userPage, name='userPage'),
     path('userPage/manageAccount/', views.manageAccount, name='manageAccount'),
+    path('userPage/downloadedApps/', views.downloadedApps, name='downloadedApps'),
+
 
     path('devPage', views.devPage, name='devPage'),
     path('devPage/newApp/', views.newApp, name='newApp'),
@@ -19,6 +21,7 @@ urlpatterns = [
 
     path('adminPage', views.adminPage, name='adminPage'),
     path('adminPage/newCategory', views.newCategory, name='newCategory'),
+
 
     path('appDetail/<int:app_id>/', views.appDetail, name='appDetail'),
     path('removeApp/<int:app_id>/', views.removeApp, name='removeApp'),

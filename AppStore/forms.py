@@ -46,6 +46,10 @@ class UpdateAppForm(forms.Form):
     description = forms.CharField(label='Description', widget=forms.Textarea)
     app_category = forms.ModelChoiceField(queryset=AppCategory.objects.all())
 
+    appImage = forms.ImageField(label="appImage")
+    appFile = forms.FileField(label="AppFile")
+
+
 
 class ManageAccount(forms.Form):
     nickname = forms.CharField(label='Nickname', max_length=20)

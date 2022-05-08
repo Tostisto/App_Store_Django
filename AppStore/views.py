@@ -285,6 +285,10 @@ def updateApp(request, app_id):
             app.description = form.cleaned_data['description']
             app.app_category = form.cleaned_data['app_category']
 
+            app.appImage = form.cleaned_data['appImage']
+
+            app.appFile = form.cleaned_data['appFile']
+
             app.save()
 
             return redirect('/devPage')
@@ -391,3 +395,14 @@ def media(request, path):
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
             return response
     raise Http404
+
+def downloadedApps(request):
+    if 'userId' not in request.session:
+        return redirect('/')
+
+    user = User.objects.get(id=request.session['userId'])
+
+    downloadedApps = Download.objects.filter(user=user)
+
+    return render(request, 'downloadedApps.html', {'downloadedApps': downloadedApps})
+

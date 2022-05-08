@@ -6,7 +6,7 @@
         <h1>Apps</h1>
 
         {% if user %}
-            <h3>Hello {{ user.email }}</h3>
+            <h3>Hello {{ user.first_name }} {{ user.last_name }}</h3>
         {% endif %}
 
         {% if devApps %}
