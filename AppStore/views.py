@@ -338,14 +338,24 @@ def manageAccount(request):
     if request.method == 'POST':
         form = ManageAccount(request.POST)
         if form.is_valid():
-            user.nickname = form.cleaned_data['nickname']
-            user.email = form.cleaned_data['email']
-            user.phone = form.cleaned_data['phone']
+            nickname = form.cleaned_data['nickname']
+            email = form.cleaned_data['email']
+            phone = form.cleaned_data['phone']
+            old_password = form.cleaned_data['old_password']
+            new_password = form.cleaned_data['password']
 
-            if user.password != form.cleaned_data['old_password']:
-                user.save()
+            user.nickname = nickname
+            user.email = email
+            user.phone = phone
+
+            if user.password == old_password:
+                if len(new_password) > 4:
+                    user.password = new_password
+                    user.save() 
+                else:
+                    form.add_error('password', 'Password must be at least 5 characters')
+                    return render(request, 'manageAccount.html', {'form': form, 'user': user})
             else:
-                user.password = form.cleaned_data['password']
                 user.save()
             
             return redirect('/userPage')

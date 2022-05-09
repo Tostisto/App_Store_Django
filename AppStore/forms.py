@@ -7,6 +7,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
 class RegisterForm(ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
     class Meta:
         model = User
         fields = ['first_name', 'last_name','nickname', 'password', 'email', 'phone']
@@ -56,8 +57,8 @@ class UpdateAppForm(forms.Form):
 
 
 class ManageAccount(forms.Form):
-    nickname = forms.CharField(label='Nickname', max_length=20)
-    old_password = forms.CharField(label="Old Password", widget=forms.PasswordInput)
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
-    email = forms.EmailField(label='Email')
-    phone = forms.CharField(label='Phone', max_length=20)
+    nickname = forms.CharField(label='Nickname', max_length=20, required=True)
+    email = forms.EmailField(label='Email', required=True)
+    phone = forms.CharField(label='Phone', max_length=20, required=True)
+    old_password = forms.CharField(label="Old Password", widget=forms.PasswordInput, required=False)
+    password = forms.CharField(label='Password', widget=forms.PasswordInput, required=False)
