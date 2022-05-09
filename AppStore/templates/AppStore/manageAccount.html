@@ -1,47 +1,43 @@
-{% extends "devBase.html" %}
+{% extends "AppStore/userBase.html" %}
 
 {% block content %}
 
 <div class="d-flex justify-content-md-center">
     <div class="card">
-        <h5 class="card-header">New App</h5>
+        <h5 class="card-header">Manage User Account</h5>
             {% load crispy_forms_tags %}
             <div class="d-flex justify-content-center" style="padding-right: 10rem; padding-left: 10rem; padding-top: 2rem; padding-bottom: 2rem;">
-                <form method="post" enctype="multipart/form-data">
+                <form method="post">
                     {% csrf_token %}
+                    
                     <div class="form-outline mb-4 row">
-                        {{form.name|as_crispy_field}}
+                        {{form.nickname|as_crispy_field}}
+                    </div>
+                    
+                    <div class="form-outline mb-4 row">
+                        {{form.email|as_crispy_field}}
                     </div>
 
                     <div class="form-outline mb-4 row">
-                        {{form.version|as_crispy_field}}
+                        {{form.phone|as_crispy_field}}
                     </div>
 
                     <div class="form-outline mb-4 row">
-                        {{form.app_category|as_crispy_field}}
+                        {{form.old_password|as_crispy_field}}
                     </div>
 
                     <div class="form-outline mb-4 row">
-                        {{form.description|as_crispy_field}}
+                        {{form.password|as_crispy_field}}
                     </div>
 
                     <div class="form-outline mb-4 row">
-                        {{form.appImage|as_crispy_field}}
+                        <button type="submit" class="btn btn-primary">Update User</button>
                     </div>
-
-                    <div class="form-outline mb-4 row">
-                        {{form.appFile|as_crispy_field}}
-                    </div>
-
-                    <div class="form-outline mb-4 row">
-                        <button type="submit" class="btn btn-primary">Add App</button>
-                    </div>
-
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-    
+
 {% endblock content %}

@@ -1,19 +1,30 @@
-{% extends "userBase.html" %}
+{% extends "AppStore/base.html" %}
 
 {% block content %}
 
 <div class="d-flex justify-content-md-center">
     <div class="card">
-        <h5 class="card-header">Manage User Account</h5>
+        <h5 class="card-header">User Register</h5>
             {% load crispy_forms_tags %}
             <div class="d-flex justify-content-center" style="padding-right: 10rem; padding-left: 10rem; padding-top: 2rem; padding-bottom: 2rem;">
                 <form method="post">
                     {% csrf_token %}
-                    
+                    <div class="form-outline mb-4 row">
+                        {{form.first_name|as_crispy_field}}
+                    </div>
+
+                    <div class="form-outline mb-4 row">
+                        {{form.last_name|as_crispy_field}}
+                    </div>
+
                     <div class="form-outline mb-4 row">
                         {{form.nickname|as_crispy_field}}
                     </div>
-                    
+
+                    <div class="form-outline mb-4 row">
+                        {{form.password|as_crispy_field}}
+                    </div>
+
                     <div class="form-outline mb-4 row">
                         {{form.email|as_crispy_field}}
                     </div>
@@ -23,16 +34,13 @@
                     </div>
 
                     <div class="form-outline mb-4 row">
-                        {{form.old_password|as_crispy_field}}
+                        <button type="submit" class="btn btn-primary">Register</button>
                     </div>
 
                     <div class="form-outline mb-4 row">
-                        {{form.password|as_crispy_field}}
+                        <p>You can register as <a href="/devRegister">Developer</a></p>
                     </div>
 
-                    <div class="form-outline mb-4 row">
-                        <button type="submit" class="btn btn-primary">Update User</button>
-                    </div>
                 </form>
             </div>
         </div>

@@ -30,7 +30,7 @@ def index(request):
     else:
         form = LoginForm()
 
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'AppStore/login.html', {'form': form})
 
 
 def register(request):
@@ -40,10 +40,10 @@ def register(request):
             form.save()
             return redirect('/')
         else:
-            return render(request, 'register.html', {'form': form})
+            return render(request, 'AppStore/register.html', {'form': form})
     else:
         form = RegisterForm()
-        return render(request, 'register.html', {'form': form})
+        return render(request, 'AppStore/register.html', {'form': form})
 
 def logout(request):
     del request.session['userId']
@@ -79,10 +79,10 @@ def devRegister(request):
             return redirect('/')
 
         else:
-            return render(request, 'devRegister.html', {'form': form})
+            return render(request, 'AppStore/devRegister.html', {'form': form})
     else:
         form = DevRegisterForm()
-        return render(request, 'devRegister.html', {'form': form})
+        return render(request, 'AppStore/devRegister.html', {'form': form})
 
 
 def userPage(request):
@@ -93,7 +93,7 @@ def userPage(request):
         return redirect('/')
 
     appsList = App.objects.all()
-    template = loader.get_template('userPage.html')
+    template = loader.get_template('AppStore/userPage.html')
     context = {
         'appsList': appsList,
         'user': user,
@@ -111,7 +111,7 @@ def devPage(request):
     dev = Developer.objects.get(user=user.id)
     devApps = App.objects.all().filter(developer=dev)
 
-    template = loader.get_template('devPage.html')
+    template = loader.get_template('AppStore/devPage.html')
     context = {
         'dev': dev,
         'devApps': devApps,
@@ -131,7 +131,7 @@ def adminPage(request):
     allUsers = User.objects.all().filter(role='user')
     allApps = App.objects.all()
 
-    template = loader.get_template('adminPage.html')
+    template = loader.get_template('AppStore/adminPage.html')
     context = {
         'user': admin,
         'devs': allDevs,
@@ -167,12 +167,12 @@ def newApp(request):
 
             return redirect('/devPage')
         else:
-            return render(request, 'newApp.html', {'form': form})
+            return render(request, 'AppStore/newApp.html', {'form': form})
 
     else:
         user = User.objects.get(id=request.session['userId']) 
         form = NewAppForm()
-        return render(request, 'newApp.html', {'form': form, 'user': user})
+        return render(request, 'AppStore/newApp.html', {'form': form, 'user': user})
 
 
 def appDetail(request, app_id):
@@ -192,10 +192,10 @@ def appDetail(request, app_id):
             newReview.save()
             return redirect('/appDetail/' + str(app_id))
         else:
-            return render(request, 'appDetail.html', {'form': form, 'app': app, 'user': user, 'reviews': reviews})
+            return render(request, 'AppStore/appDetail.html', {'form': form, 'app': app, 'user': user, 'reviews': reviews})
     else:
         form = AppReviewForm()
-        return render(request, 'appDetail.html', {'form': form, 'app': app, 'user': user, 'reviews': reviews})
+        return render(request, 'AppStore/appDetail.html', {'form': form, 'app': app, 'user': user, 'reviews': reviews})
 
 
 def removeApp(request, app_id):
@@ -256,7 +256,7 @@ def manageCategory(request):
         return redirect('/')
 
     categories = AppCategory.objects.all()
-    return render(request, 'manageCategory.html', {'categories': categories})
+    return render(request, 'AppStore/manageCategory.html', {'categories': categories})
 
 
 def removeCategory(request, category_id):
@@ -286,11 +286,11 @@ def newCategory(request):
 
             return redirect('/adminPage/manageCategory')
         else:
-            return render(request, 'newCategory.html', {'form': form})
+            return render(request, 'AppStore/newCategory.html', {'form': form})
 
     else:
         form = NewCategoryForm()
-        return render(request, 'newCategory.html', {'form': form})
+        return render(request, 'AppStore/newCategory.html', {'form': form})
 
 
 def updateApp(request, app_id):
@@ -317,7 +317,7 @@ def updateApp(request, app_id):
 
             return redirect('/devPage')
         else:
-            return render(request, 'updateApp.html', {'form': form, 'app': app, 'user': user})
+            return render(request, 'AppStore/updateApp.html', {'form': form, 'app': app, 'user': user})
 
     else:
         form = UpdateAppForm( initial= {
@@ -326,7 +326,7 @@ def updateApp(request, app_id):
             'description': app.description,
             'app_category': app.app_category
         })
-        return render(request, 'updateApp.html', {'form': form, 'app': app, 'user': user})
+        return render(request, 'AppStore/updateApp.html', {'form': form, 'app': app, 'user': user})
 
 
 def manageAccount(request):
@@ -360,7 +360,7 @@ def manageAccount(request):
             
             return redirect('/userPage')
         else:
-            return render(request, 'manageAccount.html', {'form': form, 'user': user})
+            return render(request, 'AppStore/manageAccount.html', {'form': form, 'user': user})
 
     else:
         form = ManageAccount(initial={
@@ -371,7 +371,7 @@ def manageAccount(request):
             'phone': user.phone,
             'password': user.password
         })
-        return render(request, 'manageAccount.html', {'form': form, 'user': user})
+        return render(request, 'AppStore/manageAccount.html', {'form': form, 'user': user})
 
 def manageAccountDev(request):
     if 'userId' not in request.session:
@@ -394,7 +394,7 @@ def manageAccountDev(request):
             
             return redirect('/devPage')
         else:
-            return render(request, 'manageAccount.html', {'form': form, 'user': user})
+            return render(request, 'AppStore/manageAccount.html', {'form': form, 'user': user})
 
     else:
         form = ManageAccount(initial={
@@ -405,7 +405,7 @@ def manageAccountDev(request):
             'phone': user.phone,
             'password': user.password
         })
-        return render(request, 'manageAccount.html', {'form': form, 'user': user})
+        return render(request, 'AppStore/manageAccount.html', {'form': form, 'user': user})
 
 def devRemoveApp(request, app_id):
     user = User.objects.get(id=request.session['userId'])
@@ -438,5 +438,5 @@ def downloadedApps(request):
 
     downloadedApps = Download.objects.filter(user=user)
 
-    return render(request, 'downloadedApps.html', {'downloadedApps': downloadedApps})
+    return render(request, 'AppStore/downloadedApps.html', {'downloadedApps': downloadedApps})
 
